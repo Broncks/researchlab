@@ -1,14 +1,13 @@
 import time
 
-computing_time_start = time.time()
-print(computing_time_start)
+class ComputingTime:
 
+    def __init__(self):
+        self.timestampStart = 0
 
-computing_time_end = time.time()
-computing_time = computing_time_end - computing_time_start
+    def computingTimeStart(self):
+        self.timestampStart = time.time()
 
-print("computing_time_check ", computing_time_end, computing_time_start)
-print("computing_time ", (computing_time_end - computing_time_start))
-
-
-#TODO write start and stop function
+    def giveComputingTimeAndStop(self):
+        myTime = time.time() - self.timestampStart
+        return myTime
