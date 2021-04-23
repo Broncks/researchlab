@@ -7,7 +7,7 @@ if __name__ == "__main__":
     greedyResultsList = createGreedyResults()
     randomResultsList = createRandomResults()
     createOutput(greedyResultsList, randomResultsList)
-    greedyResultsList[0].result
+
 
 
 

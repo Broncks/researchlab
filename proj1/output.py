@@ -9,10 +9,10 @@ def createOutput(greedyResultsList, randomResultsList):
 
     outWorksheet.write(0, 0, "Instance")
     outWorksheet.write(0, 1, "Results Random")
-    outWorksheet.write(0, 2, "Computing Time (sec)")
+    outWorksheet.write(0, 2, "Computing Time (ns)")
     outWorksheet.write(0, 3, "% of Optimum")
     outWorksheet.write(0, 4, "Results Greedy")
-    outWorksheet.write(0, 5, "Computing Time (sec)")
+    outWorksheet.write(0, 5, "Computing Time (ns)")
     outWorksheet.write(0, 6, "% of Optimum")
     outWorksheet.write(0, 7, "Optimum")
 

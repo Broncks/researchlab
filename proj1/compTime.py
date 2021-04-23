@@ -6,8 +6,9 @@ class ComputingTime:
         self.timestampStart = 0
 
     def computingTimeStart(self):
-        self.timestampStart = time.time()
+        self.timestampStart = time.perf_counter_ns()
 
     def giveComputingTimeAndStop(self):
-        myTime = time.time() - self.timestampStart
+        myTime = time.perf_counter_ns() - self.timestampStart
+
         return myTime
