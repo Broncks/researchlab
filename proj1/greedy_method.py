@@ -1,15 +1,16 @@
 
 from proj1.compTime import *
-from proj1.inputOutput import *
+from proj1.input import *
 
-class results():
+
+class Results:
     numEntries = 0
 
     def __init__(self, result, compTime, perOfOpt): #Konstruktor
         self.result = result
         self.compTime = compTime
         self.perOfOpt = perOfOpt
-        results.numEntries += 1
+        Results.numEntries += 1
 
 
 def greedy_method(capacity, weights, values):
@@ -57,6 +58,9 @@ def createGreedyResults():
         weights = list(map(int, dataSetList[i].weightItems))
         values = list(map(int, dataSetList[i].valItems))
 
+        print("")
+        print("Berechnung ", i+1, " Greedy")
+
         greedyValue = greedy_method(capacity, weights, values)
         print("Greedy Value: ", greedyValue)
 
@@ -67,7 +71,7 @@ def createGreedyResults():
         perOfOpt = greedyValue / optima
         print("Prozent vom Optimum: ", perOfOpt)
 
-        greedyResults.append([results(greedyValue, compTime, perOfOpt)]) #append results to list
+        greedyResults.append(Results(greedyValue, compTime, perOfOpt)) #append results to list
 
     return greedyResults
 

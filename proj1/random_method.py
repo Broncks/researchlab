@@ -1,15 +1,16 @@
 import random
-from proj1.inputOutput import *
+from proj1.input import *
 from proj1.compTime import *
 
-class results():
+
+class Results:
     numEntries = 0
 
     def __init__(self, result, compTime, perOfOpt): #Konstruktor
         self.result = result
         self.compTime = compTime
         self.perOfOpt = perOfOpt
-        results.numEntries += 1
+        Results.numEntries += 1
 
 def random_method(capacity, weights, values):
 
@@ -53,6 +54,9 @@ def createRandomResults():
         weights = list(map(int, dataSetList[i].weightItems))
         values = list(map(int, dataSetList[i].valItems))
 
+        print("")
+        print("Berechnung ", i + 1, " Random")
+
         randomValue = random_method(capacity, weights, values)
         print("Random Value: ", randomValue)
 
@@ -63,7 +67,7 @@ def createRandomResults():
         perOfOpt = randomValue / optima
         print("Prozent vom Optimum: ", perOfOpt)
 
-        randomResults.append([results(randomValue, compTime, perOfOpt)]) #append results to list
+        randomResults.append(Results(randomValue, compTime, perOfOpt)) #append results to list
 
     return randomResults
 
