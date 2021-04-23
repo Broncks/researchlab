@@ -8,6 +8,7 @@ if __name__ == "__main__":
     randomResultsList = createRandomResults()
     createOutput(greedyResultsList, randomResultsList)
     greedyResultsList[0].result
+#test
 
 
 
