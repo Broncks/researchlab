@@ -1,5 +1,4 @@
 import xlsxwriter as xs
-from proj1.input import *
 
 
 def createOutput(greedyResultsList, randomResultsList):
@@ -7,15 +6,13 @@ def createOutput(greedyResultsList, randomResultsList):
     outWorksheet = outWorkbook.add_worksheet()
 
     greedyResultsList[0].result
-    # for i in range(len(knapsack_vars)):
-    #    knapsack_vars[i] = knapsack_vars[i][:-1]
 
     outWorksheet.write(0, 0, "Instance")
     outWorksheet.write(0, 1, "Results Random")
-    outWorksheet.write(0, 2, "Computing Time")
+    outWorksheet.write(0, 2, "Computing Time (sec)")
     outWorksheet.write(0, 3, "% of Optimum")
     outWorksheet.write(0, 4, "Results Greedy")
-    outWorksheet.write(0, 5, "Computing Time")
+    outWorksheet.write(0, 5, "Computing Time (sec)")
     outWorksheet.write(0, 6, "% of Optimum")
     outWorksheet.write(0, 7, "Optimum")
 
@@ -42,11 +39,10 @@ def createOutput(greedyResultsList, randomResultsList):
     for i in range(len(greedyResultsList)):
         outWorksheet.write(i + 1, 1, randomResultsList[i].result)
         outWorksheet.write(i + 1, 2, randomResultsList[i].compTime)
-        outWorksheet.write(i + 1, 3, randomResultsList[i].perOfOpt)
+        outWorksheet.write(i + 1, 3, round(randomResultsList[i].perOfOpt*100, 2))
 
         outWorksheet.write(i + 1, 4, greedyResultsList[i].result)
         outWorksheet.write(i + 1, 5, greedyResultsList[i].compTime)
-        outWorksheet.write(i + 1, 6, greedyResultsList[i].perOfOpt)
-        # print(greedyResultsList[0].)
+        outWorksheet.write(i + 1, 6, round(greedyResultsList[i].perOfOpt*100, 2))
 
     outWorkbook.close()

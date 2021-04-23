@@ -1,8 +1,4 @@
-
-
-
 def createDataSets():
-
     dataSetList = []
     input_list = [
         "../proj1/inputfiles/f1_l-d_kp_10_269.txt",
@@ -28,15 +24,13 @@ def createDataSets():
         "../proj1/optima/f10_l-d_kp_20_879.txt"
     ]
 
-
     for i in range(len(input_list)):
-
         print("Liste wird erzeugt mit: ", input_list[i], "und ", optima_list[i])
         dataSetList.append(DataSet(input_list[i], optima_list[i]))
     print()
 
-
     return dataSetList
+
 
 class DataSet:
 
@@ -68,8 +62,3 @@ class DataSet:
         with open(filePath_optima, "r") as file:
             for line in file:
                 self.optima = line
-
-        #print("values of items", self.valItems)
-        #print("weight of items ", self.weightItems)
-        #print("num_of_items ", num_of_items)
-        #print("knapsack_cap ", knapsack_cap)
