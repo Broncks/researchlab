@@ -1,5 +1,5 @@
 from time import time
-from warehouse import RMFS
+from proj2.warehouse import RMFS
 import random
 
 
