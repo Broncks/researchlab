@@ -43,7 +43,6 @@ class RMFS:
 
     def remove_pod_from_storage(self, storage, pod, cost):
         """Remove specified pod from storage area, then update cost"""
-
         cost += np.where(storage == pod)[0][0]+1 
         storage = np.asarray([-1 if p == pod else p for p in storage])
 
