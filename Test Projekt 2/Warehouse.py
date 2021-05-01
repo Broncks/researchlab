@@ -128,6 +128,7 @@ def simulated_annealing(rmfs, demandlist, initsol, starttemp, mintemp, coolingfa
     storage, current_cost = rmfs.run(demandlist, solutionlist)
 
     while temperature > mintemp and iterations < 1000:
+        print("Iterationen:", iterations)
         neighbor_solutionlist = [create_neighbor(i) for i in best_solution]
         storage, new_cost = rmfs.run(demandlist, neighbor_solutionlist)
         delta = new_cost - current_cost
@@ -161,12 +162,12 @@ def read_demandlist(filename):
     """
 
     demandlist = []
-    with open("demandlist.txt") as inputfile:
-        for line in inputfile:
-            demandtuple = tuple(
-                int(num) for num in line.replace('(', '').replace(')', '').replace('\n', '').split(', '))
-            demandlist.append(demandtuple)
-
+    # WRITE YOUR CODE HERE
+    with open('demandlist.txt', "r") as file:
+        for line in file:
+            p = line.split()
+            demandlist.append((int(p[0]), int(p[1])))
+    file.close()
     return demandlist
 
 
@@ -176,47 +177,48 @@ def print_stats(storage, cost, steps):
     print(f"Total cost: {cost}")
     print(f"Avg. cost per pod movement: {cost / steps / 2}")
 
+if __name__ == "__main__":
 
-ppods = .75
-nplaces = 20
-nstations = 2
-qsize = 3
+    ppods = .75
+    nplaces = 20
+    nstations = 2
+    qsize = 3
 
-max_placeid = nplaces - int(ppods * nplaces) + nstations * qsize
+    max_placeid = nplaces - int(ppods * nplaces) + nstations * qsize
 
-initstorage = []
-with open("initial_storage.txt") as inputfile:
-    for line in inputfile:
-        storage_place = int(line.replace('\n', ''))
-        initstorage.append(storage_place)
+    initstorage = []
+    with open("initial_storage.txt") as inputfile:
+        for line in inputfile:
+            storage_place = int(line.replace('\n', ''))
+            initstorage.append(storage_place)
 
-demandlist = read_demandlist("demandlist.txt")
+    demandlist = read_demandlist("demandlist.txt")
 
-rmfs = Warehouse(initstorage, ppods, nplaces, nstations, qsize)
+    rmfs = Warehouse(initstorage, ppods, nplaces, nstations, qsize)
 
-print("Random:")
-solutionlist_rand = []
-for eachrow in demandlist:
-    solutionlist_rand.append(np.random.randint(max_placeid))
+    print("Random:")
+    solutionlist_rand = []
+    for eachrow in demandlist:
+        solutionlist_rand.append(np.random.randint(max_placeid))
 
-storage, random_cost = rmfs.run(demandlist, solutionlist_rand)
-print_stats(storage, random_cost, len(demandlist))
+    storage, random_cost = rmfs.run(demandlist, solutionlist_rand)
+    print_stats(storage, random_cost, len(demandlist))
 
-print("Cheapest place:")
-solutionlist_cheap = [0 for eachrow in demandlist]
-storage, cost = rmfs.run(demandlist, solutionlist_cheap)
-print_stats(storage, cost, len(demandlist))
+    print("Cheapest place:")
+    solutionlist_cheap = [0 for eachrow in demandlist]
+    storage, cost = rmfs.run(demandlist, solutionlist_cheap)
+    print_stats(storage, cost, len(demandlist))
 
-print("File:")
-solutionlist_file = []
-with open("oursolution.txt") as inputfile:
-    for line in inputfile:
-        storage_place = int(line.replace('\n', ''))
-        solutionlist_file.append(storage_place)
-storage, custom_cost = rmfs.run(demandlist, solutionlist_file)
-print_stats(storage, custom_cost, len(demandlist))
+    print("File:")
+    solutionlist_file = []
+    with open("oursolution.txt") as inputfile:
+        for line in inputfile:
+            storage_place = int(line.replace('\n', ''))
+            solutionlist_file.append(storage_place)
+    storage, custom_cost = rmfs.run(demandlist, solutionlist_file)
+    print_stats(storage, custom_cost, len(demandlist))
 
-print("Simulated annealing:")
-solutionlist = simulated_annealing(rmfs, demandlist, solutionlist_rand, random_cost * 1, 10, 0.90)
-storage, cost = rmfs.run(demandlist, solutionlist)
-print_stats(storage, cost, len(demandlist))
+    print("Simulated annealing:")
+    solutionlist = simulated_annealing(rmfs, demandlist, solutionlist_rand, random_cost * 1, 10, 0.90)
+    storage, cost = rmfs.run(demandlist, solutionlist)
+    print_stats(storage, cost, len(demandlist))
