@@ -10,13 +10,16 @@ def initialise_demand_list():
         demandlist list((int,int)):     List of tupels
     """
 
-    demandlist = []
-    with open('demandlist.txt') as inputfile:
-        for line in inputfile:
-            demandtuple = tuple(
-                int(num) for num in line.replace('(', '').replace(')', '').replace('\n', '').split(', '))
-            demandlist.append(demandtuple)
 
+
+
+    demandlist = []
+    # WRITE YOUR CODE HERE
+    with open('demandlist.txt', "r") as file:
+        for line in file:
+            p = line.split()
+            demandlist.append((int(p[0]), int(p[1])))
+    file.close()
     return demandlist
 
 
@@ -134,18 +137,19 @@ def generate_solutionfile(file_path, result_list):
         oursolution.write('\n')
     oursolution.close
 
+if __name__ == "__main__":
+    npods = 15
+    nstations = 2
+    qsize = 3
+    max_placeid = 11
+    lowest_solution = 3
 
-npods = 15
-nstations = 2
-qsize = 3
-max_placeid = 11
-lowest_solution = 3
+    solution_path = "oursolution.txt"
 
-solution_path = "oursolution.txt"
+    demandlist = initialise_demand_list()
+    pod_probability = calculate_pod_probability(demandlist, npods)
+    pod_relevance = create_relevance_index(find_returning_pods(demandlist, nstations, qsize), pod_probability)
+    result = find_best_returning_place(demandlist, pod_relevance, lowest_solution, npods)
 
-demandlist = initialise_demand_list()
-pod_probability = calculate_pod_probability(demandlist, npods)
-pod_relevance = create_relevance_index(find_returning_pods(demandlist, nstations, qsize), pod_probability)
-result = find_best_returning_place(demandlist, pod_relevance, lowest_solution, npods)
+    generate_solutionfile(solution_path, result)
 
-generate_solutionfile(solution_path, result)
