@@ -2,7 +2,6 @@ from time import time
 from proj2.warehouse import RMFS
 import random
 
-
 def read_demandlist(filename):
     demandlist = []
     # WRITE YOUR CODE HERE
@@ -48,7 +47,7 @@ def main():
     demandlist = read_demandlist("demandlist.txt")
     print("demandlist ", demandlist)
     for i in range(10000):
-        solutionlist.append(random.randint(1, 10))
+        solutionlist.append(random.randint(0, 10))
     print("solutionlist ", solutionlist)
     print("länge solutionlist ", len(solutionlist))
     print("länge demandlist ", len(demandlist))

@@ -7,3 +7,16 @@ if __name__ == "__main__":
     greedyResultsList = createGreedyResults()
     randomResultsList = createRandomResults()
     createOutput(greedyResultsList, randomResultsList)
+
+
+
+
+
+
+
+#testrohan
+
+
+#test lennart
+#Test Niklas
+
