@@ -1,6 +1,7 @@
 from time import time
 from proj2.warehouse import RMFS
 import random
+from proj2.sa import *
 
 
 def read_demandlist(filename):
@@ -49,6 +50,7 @@ def main():
     print("demandlist ", demandlist)
     for i in range(10000):
         solutionlist.append(random.randint(1, 10))
+
     print("solutionlist ", solutionlist)
     print("länge solutionlist ", len(solutionlist))
     print("länge demandlist ", len(demandlist))
@@ -67,6 +69,7 @@ def main():
     print("Simulated Annealing:")
     start = time()
     # WRITE YOUR CODE HERE
+    simulated_annealing(solutionlist)
     end = time()
     print(f"Computing Time: {end - start}\n")
 
