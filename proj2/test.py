@@ -70,6 +70,7 @@ def main():
 
     print("Simulated Annealing:")
     start = time()
+    #TODO Warum wird bei dem Methodenaufruf cost_random an der Stelle der Temperatur übergeben
     sa_solutionlist = simulated_annealing(rmfs, demandlist, solutionlist, cost_random)
     storage, cost_sa = rmfs.run(demandlist, sa_solutionlist)
     print(storage, cost_sa)
