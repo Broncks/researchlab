@@ -1,6 +1,7 @@
 from time import time
 from proj2.warehouse import RMFS
 from proj2.simulated_annealing import *
+from proj2.sa_split import sa_split
 
 def read_demandlist(filename):
     demandlist = []
@@ -70,10 +71,14 @@ def main():
 
     print("Simulated Annealing:")
     start = time()
-    #TODO Warum wird bei dem Methodenaufruf cost_random an der Stelle der Temperatur übergeben
-    sa_solutionlist = simulated_annealing(rmfs, demandlist, solutionlist, cost_random)
-    storage, cost_sa = rmfs.run(demandlist, sa_solutionlist)
-    print(storage, cost_sa)
+
+    sa_split(rmfs, demandlist, solutionlist, cost_random)
+    #Fertige Lösung wieder einkommentieren wenn der Rest failed ^^
+    #sa_solutionlist = simulated_annealing(rmfs, demandlist, solutionlist, cost_random)
+    #storage, cost_sa = rmfs.run(demandlist, sa_solutionlist)
+    #print(storage, cost_sa)
+
+
     end = time()
     print(f"Computing Time: {end - start}\n")
 
