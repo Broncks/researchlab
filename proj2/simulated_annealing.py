@@ -56,6 +56,6 @@ def simulated_annealing(rmfs, demandlist, initial_list, start_temperature):
             temperature *= cooling_factor
 
         j += 1
-
+    print(sa_solutionlist)
     return sa_solutionlist
 
