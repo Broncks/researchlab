@@ -60,6 +60,7 @@ class RMFS:
 
         if(returning_pod != -1):
             free_storage = np.where(storage == -1)[0]
+            print("freestorage: ", free_storage[solution-1], " solution ",solution)
             place = free_storage[solution]
             storage[place] = returning_pod
             cost += place + 1

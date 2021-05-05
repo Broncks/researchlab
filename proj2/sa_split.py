@@ -7,8 +7,7 @@ def sa_split(rmfs, demandlist, solutionlist, cost_random):
     demandlist_split = numpy.array_split(demandlist, 1000)  # 1000 10er listen erstellt aus demandlist
     solutionlist_split = numpy.array_split(solutionlist, 1000)
     print("demandlist_split: ", demandlist_split[0])
-    testliste = []
-    testliste[1]
+
     split_counter = 0
     for i in demandlist_split:
         print("split_counter ", split_counter)
