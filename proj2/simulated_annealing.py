@@ -1,5 +1,6 @@
 import random
 import math
+from proj2.create_neighbor import create_neighbor_list
 
 
 def simulated_annealing(rmfs, demandlist, initial_list, start_temperature):
@@ -21,7 +22,7 @@ def simulated_annealing(rmfs, demandlist, initial_list, start_temperature):
 
     final_temperature = 10 # perform SA algorithm till final_temperature is reached
     cooling_factor = 0.9
-    iterations = 100
+    iterations = 10
     iterations_per_temperature = 0 # mögl. unnötig
 
     temperature = start_temperature
@@ -33,7 +34,10 @@ def simulated_annealing(rmfs, demandlist, initial_list, start_temperature):
 
     j = 0 # counter iterations
     while temperature > final_temperature and j < iterations:
-        neighbor_solutionlist = [create_neighbor(i) for i in sa_solutionlist] # create neighbors
+        print("Iteration: ", j+1)
+        print("Temperature:", temperature)
+        #neighbor_solutionlist = [create_neighbor(i) for i in sa_solutionlist] # create neighbors
+        neighbor_solutionlist = create_neighbor_list(sa_solutionlist) # create neighbors
         storage, neighbor_cost = rmfs.run(demandlist, neighbor_solutionlist) # check neighbors
         cost_difference = neighbor_cost - current_cost
 

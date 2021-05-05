@@ -88,7 +88,7 @@ def create_neighbor(initial_return_place):
     Returns:
         neighbor_solution (int): Generated pod return place to create neighbor solution
     """
-    print("initial_return_place ", initial_return_place)
+    # print("initial_return_place ", initial_return_place)
     new_return_index = np.random.choice([-1, 0, 1], p=[0.25, 0.7, 0.05])
     # Wahrscheinlichleiten für die 3 Werte
 
@@ -103,6 +103,27 @@ def create_neighbor(initial_return_place):
         new_return_index = new_return_index + np.random.choice([-1, -2, -3, -4])
 
     return new_return_place
+
+
+def create_neighbor_list(best_solution):
+    neighbor_list = []
+    # Hohe Werte dekrementieren
+    # 0-Werte beibehalten oder Inkrementieren
+    # Alle anderen werte entweder beibehalten, inkrementieren oder dekrementieren
+
+    for i in best_solution:
+        if i >= 5:
+            neighbor_list.append(i - 4)
+            print("if1")
+        elif i == 0:
+            neighbor_list.append(i + np.random.choice([0, 1]))
+        elif i == 1:
+            neighbor_list.append(i + np.random.choice([-1, 0, 1]))
+        elif i == 2:
+            neighbor_list.append(i + np.random.choice([-1, 0, 1]), p=[0.4, 0.4, 0.2])
+        else:
+            neighbor_list.append(i + np.random.choice([-1, 0, 1]))
+    return neighbor_list
 
 
 def simulated_annealing(rmfs, demandlist, initsol, starttemp, mintemp, coolingfactor):
@@ -120,8 +141,8 @@ def simulated_annealing(rmfs, demandlist, initsol, starttemp, mintemp, coolingfa
         solutionlist (list): List of pod return places, 1 per iteration
     """
 
-    solutionlist = initsol # = solution list_random
-    temperature = starttemp # = random cost *1
+    solutionlist = initsol  # = solution list_random
+    temperature = starttemp  # = random cost *1
     storage, best_cost = rmfs.run(demandlist, solutionlist)
     best_solution = solutionlist
     iterations = 0
@@ -129,8 +150,9 @@ def simulated_annealing(rmfs, demandlist, initsol, starttemp, mintemp, coolingfa
     storage, current_cost = rmfs.run(demandlist, solutionlist)
 
     while temperature > mintemp and iterations < 100:
-        print("Iterationen:", iterations) # könnte man einfügen, sieht aber unübersichtlich aus
+        print("Iterationen:", iterations)  # könnte man einfügen, sieht aber unübersichtlich aus
         neighbor_solutionlist = [create_neighbor(i) for i in best_solution]
+        # neighbor_solutionlist = create_neighbor_list(best_solution)
         storage, new_cost = rmfs.run(demandlist, neighbor_solutionlist)
         delta = new_cost - current_cost
 
@@ -177,6 +199,7 @@ def print_stats(storage, cost, steps):
     print(f"Storage Area: \n{storage}")
     print(f"Total cost: {cost}")
     print(f"Avg. cost per pod movement: {cost / steps / 2}")
+
 
 if __name__ == "__main__":
 
