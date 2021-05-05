@@ -90,6 +90,7 @@ def create_neighbor(initial_return_place):
     """
     print("initial_return_place ", initial_return_place)
     new_return_index = np.random.choice([-1, 0, 1], p=[0.25, 0.7, 0.05])
+    # Wahrscheinlichleiten für die 3 Werte
 
     if initial_return_place + new_return_index >= max_placeid:
         new_return_place = initial_return_place + np.random.choice([-4, -5, -6, -7, -8])
@@ -119,8 +120,8 @@ def simulated_annealing(rmfs, demandlist, initsol, starttemp, mintemp, coolingfa
         solutionlist (list): List of pod return places, 1 per iteration
     """
 
-    solutionlist = initsol
-    temperature = starttemp
+    solutionlist = initsol # = solution list_random
+    temperature = starttemp # = random cost *1
     storage, best_cost = rmfs.run(demandlist, solutionlist)
     best_solution = solutionlist
     iterations = 0
@@ -128,7 +129,7 @@ def simulated_annealing(rmfs, demandlist, initsol, starttemp, mintemp, coolingfa
     storage, current_cost = rmfs.run(demandlist, solutionlist)
 
     while temperature > mintemp and iterations < 100:
-        print("Iterationen:", iterations)
+        print("Iterationen:", iterations) # könnte man einfügen, sieht aber unübersichtlich aus
         neighbor_solutionlist = [create_neighbor(i) for i in best_solution]
         storage, new_cost = rmfs.run(demandlist, neighbor_solutionlist)
         delta = new_cost - current_cost

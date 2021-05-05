@@ -1,8 +1,6 @@
 from time import time
 from proj2.warehouse import RMFS
-import random
-from proj2.sa import *
-
+from proj2.simulated_annealing import *
 
 def read_demandlist(filename):
     demandlist = []
@@ -49,13 +47,17 @@ def main():
     demandlist = read_demandlist("demandlist.txt")
     print("demandlist ", demandlist)
     for i in range(10000):
-        solutionlist.append(random.randint(1, 10))
+        solutionlist.append(random.randint(0, 10))
 
     print("solutionlist ", solutionlist)
     print("länge solutionlist ", len(solutionlist))
     print("länge demandlist ", len(demandlist))
-    print(rmfs.run(demandlist, solutionlist))
+    storage, cost_random = (rmfs.run(demandlist, solutionlist))
+    print(storage, cost_random)
+    print(type(cost_random))
     """Eigener Code Ende"""
+
+    # benötig: solutionlist_random
 
     end = time()
     print(f"Computing Time: {end - start}\n")
@@ -68,8 +70,9 @@ def main():
 
     print("Simulated Annealing:")
     start = time()
-    # WRITE YOUR CODE HERE
-    simulated_annealing(solutionlist)
+    sa_solutionlist = simulated_annealing(rmfs, demandlist, solutionlist, cost_random)
+    storage, cost_sa = rmfs.run(demandlist, sa_solutionlist)
+    print(storage, cost_sa)
     end = time()
     print(f"Computing Time: {end - start}\n")
 
