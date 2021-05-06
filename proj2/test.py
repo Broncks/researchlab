@@ -2,6 +2,8 @@ from time import time
 from proj2.warehouse import RMFS
 from proj2.simulated_annealing import *
 from proj2.sa_split import sa_split
+from proj2.sa_plot import create_sa_plot
+
 
 def read_demandlist(filename):
     demandlist = []
@@ -73,15 +75,15 @@ def main():
     print("Simulated Annealing:")
     start = time()
 
-    #Splitlösung: funktioniert aber nicht
-    #sa_split(rmfs, demandlist, solutionlist, cost_random)
+    # Splitlösung: funktioniert aber nicht
+    # sa_split(rmfs, demandlist, solutionlist, cost_random)
 
-
-    #Fertige Lösung wieder einkommentieren wenn der Rest failed ^^
-    sa_solutionlist = simulated_annealing(rmfs, demandlist, solutionlist, cost_random)
+    # Fertige Lösung wieder einkommentieren wenn der Rest failed ^^
+    sa_solutionlist, iterations_list, cost_list = simulated_annealing(rmfs, demandlist, solutionlist, cost_random)
+    create_sa_plot(cost_list, iterations_list)
     storage, cost_sa = rmfs.run(demandlist, sa_solutionlist)
-    print(storage, cost_sa)
 
+    print(storage, cost_sa)
 
     end = time()
     print(f"Computing Time: {end - start}\n")

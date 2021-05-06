@@ -22,7 +22,7 @@ def simulated_annealing(rmfs, demandlist, initial_list, start_temperature):
 
     final_temperature = 10 # perform SA algorithm till final_temperature is reached
     cooling_factor = 0.8
-    iterations = 100
+    iterations = 200
     iterations_per_temperature = 0 # mögl. unnötig
 
     temperature = start_temperature
@@ -34,6 +34,8 @@ def simulated_annealing(rmfs, demandlist, initial_list, start_temperature):
 
     storage, current_cost = rmfs.run(demandlist, initial_list)
 
+    iterations_list = []
+    cost_list = []
     j = 0 # counter iterations
     while temperature > final_temperature and j < iterations:
         print("Iteration: ", j+1)
@@ -57,11 +59,13 @@ def simulated_annealing(rmfs, demandlist, initial_list, start_temperature):
             #if iterations_per_temperature > 10: #SINN???
             temperature *= cooling_factor
 
+        iterations_list.append(j+1)
+        cost_list.append(best_cost)
         j += 1
 
     #print(sa_solutionlist)
     #print("Storageprint before", rmfs.initstorage, " and after ", storage)
     #rmfs.initstorage = storage
 
-    return sa_solutionlist
+    return sa_solutionlist, iterations_list, cost_list
 

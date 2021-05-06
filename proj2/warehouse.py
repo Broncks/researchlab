@@ -33,7 +33,7 @@ class RMFS:
         cost = 0
         queues = {k: deque(np.repeat(-1, self.qsize), self.qsize) for k in np.arange(self.nstations)}
         storage = self.initstorage
-        print("storage im objekt ",storage)
+
         for demand, solution in zip(demandlist, solutionlist):
             storage, cost = self.remove_pod_from_storage(storage, demand[0], cost)
             queues, returning_pod = self.remove_pod_from_queue(queues, demand[1])
@@ -44,8 +44,8 @@ class RMFS:
 
     def remove_pod_from_storage(self, storage, pod, cost):
         """Remove specified pod from storage area, then update cost"""
-        #print("Storage an Fehlerstelle: ", storage)
-        #print("Pod: ", pod)
+        # print("Storage an Fehlerstelle: ", storage)
+        # print("Pod: ", pod)
         cost += np.where(storage == pod)[0][0] + 1
         storage = np.asarray([-1 if p == pod else p for p in storage])
 
