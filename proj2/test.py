@@ -43,7 +43,8 @@ def main():
 
     print("Random:")
     start = time()
-    solutionlist_random = [] # creat solution list for random algorithm
+    solutionlist_random = []
+    # create solution list for random algorithm
     for i in range(10000):
         solutionlist_random.append(random.randint(0, 10))
     storage, cost_random = (rmfs.run(demandlist, solutionlist_random)) # run warehouse method
@@ -53,7 +54,12 @@ def main():
 
     print("Greedy:")
     start = time()
-
+    solutionlist_greedy = []
+    # create solution list for greedy algorithm
+    for i in demandlist:
+        solutionlist_greedy.append(0)
+    storage_greedy, cost_greedy = rmfs.run(demandlist, solutionlist_greedy)
+    print("Greedy Costs", cost_greedy)
     end = time()
     print(f"Computing Time: {end - start}\n")
 
@@ -66,7 +72,6 @@ def main():
     print(storage, cost_sa)
     end = time()
     print(f"Computing Time: {end - start}\n")
-
 
 if __name__ == '__main__':
     main()
