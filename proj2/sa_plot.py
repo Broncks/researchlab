@@ -8,7 +8,7 @@ def create_sa_plot(costs_list, iterations_list):
 
     # plotting points as a scatter plot
     plt.scatter(x, y, label="Costs", color="red",
-                marker=".", s=60)
+                marker=".", s=30)
 
     # x-axis label
     plt.xlabel('Iterations')
