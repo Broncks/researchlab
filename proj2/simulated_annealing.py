@@ -19,17 +19,15 @@ def simulated_annealing(rmfs, demandlist, initial_list, start_temperature):
                                     (-> one pod return place per iteration)
     """
 
-
     final_temperature = 100 # perform SA algorithm till final_temperature is reached
     cooling_factor = 0.9
-    iterations = 10
+    iterations = 1000
 
     temperature = start_temperature # set start temperature
     sa_list = initial_list
     sa_solutionlist = initial_list
 
     # determine storage & cost based on solutionlist_random provided in method-argument
-    # execute two times warehouse method to set starting point
     storage, best_cost = rmfs.run(demandlist, initial_list)
     storage, current_cost = rmfs.run(demandlist, initial_list)
 

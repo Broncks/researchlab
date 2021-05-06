@@ -36,40 +36,37 @@ def main():
 
     initstorage = read_storage("initial_storage.txt")
     demandlist = read_demandlist('demandlist.txt')
-
     rmfs = RMFS(initstorage, ppods, nplaces, nstations, qsize)
-    print("Initial positions in storage: ", initstorage)
-    print("Demandlist (given in task): ", demandlist)
 
-    print("Random:")
+    print("Random Algorithm")
     start = time()
     solutionlist_random = []
     # create solution list for random algorithm
     for i in range(10000):
         solutionlist_random.append(random.randint(0, 10))
-    storage, cost_random = (rmfs.run(demandlist, solutionlist_random)) # run warehouse method
-    print(storage, cost_random)
+    storage_random, cost_random = (rmfs.run(demandlist, solutionlist_random)) # run warehouse method
+    print_stats(storage_random, cost_random, len(demandlist))
     end = time()
     print(f"Computing Time: {end - start}\n")
 
-    print("Greedy:")
+    print("Greedy Algorithm")
     start = time()
     solutionlist_greedy = []
     # create solution list for greedy algorithm
     for i in demandlist:
         solutionlist_greedy.append(0)
     storage_greedy, cost_greedy = rmfs.run(demandlist, solutionlist_greedy)
-    print("Greedy Costs", cost_greedy)
+    print_stats(storage_greedy, cost_greedy, len(demandlist))
     end = time()
     print(f"Computing Time: {end - start}\n")
 
-    print("Simulated Annealing:")
+    print("Simulated Annealing Algorithm")
     start = time()
     sa_solutionlist, iterations_list, cost_list = simulated_annealing(
         rmfs, demandlist, solutionlist_random, cost_random)
     create_sa_plot(cost_list, iterations_list) # create a scatterplot as visualisation
-    storage, cost_sa = rmfs.run(demandlist, sa_solutionlist) # run warehouse method
-    print(storage, cost_sa)
+    storage_sa, cost_sa = rmfs.run(demandlist, sa_solutionlist) # run warehouse method
+    print_stats(storage_sa, cost_sa, len(demandlist))
     end = time()
     print(f"Computing Time: {end - start}\n")
 
