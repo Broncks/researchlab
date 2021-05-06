@@ -38,6 +38,7 @@ def main():
     demandlist = read_demandlist('demandlist.txt')
 
     rmfs = RMFS(initstorage, ppods, nplaces, nstations, qsize)
+    print("initstorage", initstorage)
 
     print("Random:")
     start = time()
@@ -72,11 +73,14 @@ def main():
     print("Simulated Annealing:")
     start = time()
 
-    sa_split(rmfs, demandlist, solutionlist, cost_random)
+    #Splitlösung: funktioniert aber nicht
+    #sa_split(rmfs, demandlist, solutionlist, cost_random)
+
+
     #Fertige Lösung wieder einkommentieren wenn der Rest failed ^^
-    #sa_solutionlist = simulated_annealing(rmfs, demandlist, solutionlist, cost_random)
-    #storage, cost_sa = rmfs.run(demandlist, sa_solutionlist)
-    #print(storage, cost_sa)
+    sa_solutionlist = simulated_annealing(rmfs, demandlist, solutionlist, cost_random)
+    storage, cost_sa = rmfs.run(demandlist, sa_solutionlist)
+    print(storage, cost_sa)
 
 
     end = time()
