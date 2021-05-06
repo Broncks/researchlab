@@ -1,13 +1,11 @@
 from time import time
 from proj2.warehouse import RMFS
 from proj2.simulated_annealing import *
-from proj2.sa_split import sa_split
 from proj2.sa_plot import create_sa_plot
 
 
 def read_demandlist(filename):
     demandlist = []
-    # WRITE YOUR CODE HERE
     with open(filename, "r") as file:
         for line in file:
             p = line.split()
@@ -40,51 +38,32 @@ def main():
     demandlist = read_demandlist('demandlist.txt')
 
     rmfs = RMFS(initstorage, ppods, nplaces, nstations, qsize)
-    print("initstorage", initstorage)
+    print("Initial positions in storage: ", initstorage)
+    print("Demandlist (given in task): ", demandlist)
 
     print("Random:")
     start = time()
-    # WRITE YOUR CODE HERE
-
-    """Eigener Code Anfang"""
-    solutionlist = []
-    demandlist = read_demandlist("demandlist.txt")
-    print("demandlist ", demandlist)
+    solutionlist_random = [] # creat solution list for random algorithm
     for i in range(10000):
-        solutionlist.append(random.randint(0, 10))
-
-    print("solutionlist ", solutionlist)
-    print("länge solutionlist ", len(solutionlist))
-    print("länge demandlist ", len(demandlist))
-    storage, cost_random = (rmfs.run(demandlist, solutionlist))
+        solutionlist_random.append(random.randint(0, 10))
+    storage, cost_random = (rmfs.run(demandlist, solutionlist_random)) # run warehouse method
     print(storage, cost_random)
-    print(type(cost_random))
-    """Eigener Code Ende"""
-
-    # benötig: solutionlist_random
-
     end = time()
     print(f"Computing Time: {end - start}\n")
 
     print("Greedy:")
     start = time()
-    # WRITE YOUR CODE HERE
+
     end = time()
     print(f"Computing Time: {end - start}\n")
 
     print("Simulated Annealing:")
     start = time()
-
-    # Splitlösung: funktioniert aber nicht
-    # sa_split(rmfs, demandlist, solutionlist, cost_random)
-
-    # Fertige Lösung wieder einkommentieren wenn der Rest failed ^^
-    sa_solutionlist, iterations_list, cost_list = simulated_annealing(rmfs, demandlist, solutionlist, cost_random)
-    create_sa_plot(cost_list, iterations_list)
-    storage, cost_sa = rmfs.run(demandlist, sa_solutionlist)
-
+    sa_solutionlist, iterations_list, cost_list = simulated_annealing(
+        rmfs, demandlist, solutionlist_random, cost_random)
+    create_sa_plot(cost_list, iterations_list) # create a scatterplot as visualisation
+    storage, cost_sa = rmfs.run(demandlist, sa_solutionlist) # run warehouse method
     print(storage, cost_sa)
-
     end = time()
     print(f"Computing Time: {end - start}\n")
 

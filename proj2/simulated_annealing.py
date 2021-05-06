@@ -20,18 +20,17 @@ def simulated_annealing(rmfs, demandlist, initial_list, start_temperature):
     """
 
 
-    final_temperature = 10 # perform SA algorithm till final_temperature is reached
-    cooling_factor = 0.8
-    iterations = 100
-    iterations_per_temperature = 0 # mögl. unnötig
+    final_temperature = 100 # perform SA algorithm till final_temperature is reached
+    cooling_factor = 0.9
+    iterations = 10
 
-    temperature = start_temperature
+    temperature = start_temperature # set start temperature
+    sa_list = initial_list
     sa_solutionlist = initial_list
 
     # determine storage & cost based on solutionlist_random provided in method-argument
-    #print("demandlist best_cost ", demandlist, " initial_list", initial_list)
+    # execute two times warehouse method to set starting point
     storage, best_cost = rmfs.run(demandlist, initial_list)
-
     storage, current_cost = rmfs.run(demandlist, initial_list)
 
     iterations_list = []
@@ -42,30 +41,23 @@ def simulated_annealing(rmfs, demandlist, initial_list, start_temperature):
         print("Temperature:", temperature)
         print("Current Cost: ", current_cost)
         print()
-        #neighbor_solutionlist = [create_neighbor(i) for i in sa_solutionlist] # create neighbors
-        neighbor_solutionlist = create_neighbor_list(sa_solutionlist) # create neighbors
+        neighbor_solutionlist = create_neighbor_list(sa_list) # create neighbors
         storage, neighbor_cost = rmfs.run(demandlist, neighbor_solutionlist) # check neighbors
         cost_difference = neighbor_cost - current_cost
 
         if math.exp(-cost_difference / temperature) > random.uniform(0, 1) or cost_difference < 0:
             current_cost = neighbor_cost
+            sa_list = neighbor_solutionlist
 
             if current_cost < best_cost: # check if current_cost better than best_cost
                 best_cost = current_cost
                 sa_solutionlist = neighbor_solutionlist
 
-
-            #iterations_per_temperature += 1
-            #if iterations_per_temperature > 10: #SINN???
-            temperature *= cooling_factor
+            temperature *= cooling_factor # cool temperature down
 
         iterations_list.append(j+1)
         cost_list.append(best_cost)
         j += 1
-
-    #print(sa_solutionlist)
-    #print("Storageprint before", rmfs.initstorage, " and after ", storage)
-    #rmfs.initstorage = storage
 
     return sa_solutionlist, iterations_list, cost_list
 
