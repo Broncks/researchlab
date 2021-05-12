@@ -21,7 +21,7 @@ def simulated_annealing(rmfs, demandlist, initial_list, start_temperature):
 
     final_temperature = 100 # perform SA algorithm till final_temperature is reached
     cooling_factor = 0.9
-    iterations = 1000
+    iterations = 100
 
     temperature = start_temperature # set start temperature
     sa_list = initial_list
