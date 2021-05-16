@@ -19,7 +19,7 @@ def print_stats(storage, cost, steps):
     print(f"Total cost: {cost}")
     print(f"Avg. cost per pod movement: {cost/steps/2}")
 
-def main():
+def main(list_number):
     ppods = .75
     nplaces = 20
     nstations = 2
@@ -27,7 +27,7 @@ def main():
     max_placeid = nplaces - int(ppods*nplaces) + nstations*qsize
 
     initstorage = read_storage("initial_storage.txt")
-    demandlist = read_demandlist('demandlist.txt')
+    demandlist = read_demandlist(f'demandlist{list_number}.txt')
 
     rmfs = RMFS(initstorage, ppods, nplaces, nstations, qsize)
 
@@ -49,10 +49,11 @@ def main():
 
     print("Large Neighborhood Search:")
     start = time()
-    lns(rmfs, solutionlist_rand)
+    lns(rmfs, solutionlist_rand, demandlist)
     end = time()
     print(f"Computing Time: {end - start}\n")
 
 
 if __name__ == '__main__':
-    main()
+    for i in range(3):
+        main(i+1)
