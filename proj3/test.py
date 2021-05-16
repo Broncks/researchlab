@@ -29,7 +29,9 @@ def main(list_number):
     initstorage = read_storage("initial_storage.txt")
     demandlist = read_demandlist(f'demandlist{list_number}.txt')
 
-    rmfs = RMFS(initstorage, ppods, nplaces, nstations, qsize)
+    if list_number == 1:
+        rmfs = RMFS(initstorage, ppods, nplaces, nstations, qsize)
+
 
     print("Random:")
     start = time()
@@ -49,11 +51,15 @@ def main(list_number):
 
     print("Large Neighborhood Search:")
     start = time()
-    lns(rmfs, solutionlist_rand, demandlist)
+    solutionlist_lns = lns(rmfs, solutionlist_rand, demandlist)
+    storage, cost = rmfs.run(demandlist, solutionlist_lns)
+    print_stats(storage, cost, len(demandlist))
     end = time()
     print(f"Computing Time: {end - start}\n")
 
 
 if __name__ == '__main__':
     for i in range(3):
+        print("Hauptschleife: ", i)
         main(i+1)
+
