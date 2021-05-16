@@ -4,7 +4,6 @@ import random
 
 sa_temperature = 1000
 
-
 def lns(rmfs, rand_solutionlist, demandlist):
     iterations = 200
     
