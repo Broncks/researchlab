@@ -6,14 +6,14 @@ sa_temperature = 1000
 
 def lns(rmfs, rand_solutionlist, demandlist):
     global sa_temperature
-    iterations = 10
+    iterations = 50 #TODO auf 200 setzen
     sa_final_temperature = 100
 
     solutionlist = rand_solutionlist
     best_solutionlist = solutionlist
 
     i = 0 # counter
-    while sa_temperature > sa_final_temperature or i < iterations:
+    while sa_temperature > sa_final_temperature and i < iterations:
         print( "LNS: " , sa_temperature, i)
         candidate_solution = repair(destroy(solutionlist))
 
@@ -27,6 +27,7 @@ def lns(rmfs, rand_solutionlist, demandlist):
 
         i += 1
 
+    sa_temperature = 1000
     return best_solutionlist
 
 

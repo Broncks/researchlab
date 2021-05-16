@@ -29,11 +29,10 @@ def main(list_number):
     initstorage = read_storage("initial_storage.txt")
     demandlist = read_demandlist(f'demandlist{list_number}.txt')
 
-    if list_number == 1:
-        rmfs = RMFS(initstorage, ppods, nplaces, nstations, qsize)
+     #TODO Warehouse
+    rmfs = RMFS(initstorage, ppods, nplaces, nstations, qsize)
 
-
-    print("Random:")
+    print("Random:") #TODO Random ist scheiße!
     start = time()
     solutionlist_rand = [randrange(0, max_placeid) for i in range(len(demandlist))]
     storage, cost = rmfs.run(demandlist, solutionlist_rand)
@@ -62,4 +61,5 @@ if __name__ == '__main__':
     for i in range(3):
         print("Hauptschleife: ", i)
         main(i+1)
+
 
