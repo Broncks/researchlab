@@ -36,6 +36,10 @@ def main(list_number):
     start = time()
     solutionlist_rand = [randrange(0, max_placeid) for i in range(len(demandlist))]
     storage, cost = rmfs.run(demandlist, solutionlist_rand)
+    # Fehler tritt auf, wenn ein Wert der Solution zufällig größer ist, als die aktuell freien Plätze der Storage
+    # Nur bei der 2. Demandlist sind IMMER zu Beginn für 3 Iterationen nur 9 Plätze im Storage frei
+    # Wenn in diesen Iterationen ein Wert größer-gleich 9 in der Solution steht, gibt's Index out of bounds
+    # Warum? Immer noch keine Ahnung...
     print_stats(storage, cost, len(demandlist))
     end = time()
     print(f"Computing Time: {end-start}\n")
@@ -61,5 +65,3 @@ if __name__ == '__main__':
     for i in range(3):
         print("Hauptschleife: ", i)
         main(i+1)
-
-
