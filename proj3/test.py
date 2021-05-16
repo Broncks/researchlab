@@ -1,5 +1,6 @@
 from time import time
-from Source.project2.warehouse import RMFS
+from proj3.warehouse import RMFS
+from proj3.lns import *
 from random import *
 
 
@@ -48,7 +49,7 @@ def main():
 
     print("Large Neighborhood Search:")
     start = time()
-    # WRITE YOUR CODE HERE
+    lns(rmfs, solutionlist_rand)
     end = time()
     print(f"Computing Time: {end - start}\n")
 
