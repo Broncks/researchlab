@@ -15,7 +15,7 @@ def lns(rmfs, rand_solutionlist, demandlist):
 
     i = 0  # counter
     while sa_temperature > sa_final_temperature and i < iterations:
-        print("LNS: ", sa_temperature, i)
+        print("LNS:", "t:", round(sa_temperature, 1), "i:", i)
         candidate_solution = repair(destroy(solutionlist))
 
         if accept(rmfs, demandlist, solutionlist, candidate_solution):
@@ -27,6 +27,11 @@ def lns(rmfs, rand_solutionlist, demandlist):
             best_solutionlist = solutionlist
 
         i += 1
+
+    if sa_temperature <= sa_final_temperature:
+        print(f"STOP: Temperature {round(sa_temperature, 1)} below final temperature {sa_final_temperature}")
+    elif i >= iterations:
+        print(f"STOP: Iterations {i} reached maximum iterations {iterations}")
 
     sa_temperature = 1000
     return best_solutionlist
