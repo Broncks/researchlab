@@ -37,15 +37,18 @@ def lns(rmfs, rand_solutionlist, demandlist):
     return best_solutionlist
 
 
-def destroy(sl):
+def destroy(solutionlist):
     percentage = 15
+
+    sl = solutionlist.copy()
     for i in range(len(sl)):
         if np.random.randint(100) <= percentage:
             sl[i] = -1
     return sl
 
 
-def repair(sl):
+def repair(solutionlist):
+    sl = solutionlist.copy()
     for i in range(len(sl)):
         if sl[i] == -1:
             sl[i] = np.random.choice([0, 1], p=[0.999, 0.001])
