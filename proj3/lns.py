@@ -40,7 +40,7 @@ def destroy(sl):
     return sl
 
 
-def repair(sl):  # TODO
+def repair(sl):
     for i in range(len(sl)):
         if sl[i] == -1:
             sl[i] = np.random.choice([0, 1], p=[0.999, 0.001])
@@ -55,7 +55,6 @@ def accept(rmfs, demandlist, sl, sl_cand):
     storage, current_cost = rmfs.run(demandlist, sl)
     storage, neighbor_cost = rmfs.run(demandlist, sl_cand)
     cost_difference = neighbor_cost - current_cost
-    print("Accept: ", sa_temperature)
 
     if math.exp(-cost_difference / sa_temperature) > random.uniform(0, 1) or cost_difference < 0:
         sa_temperature *= cooling_factor  # cool temperature down
