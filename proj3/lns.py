@@ -4,17 +4,18 @@ import random
 
 sa_temperature = 1000
 
+
 def lns(rmfs, rand_solutionlist, demandlist):
     global sa_temperature
-    iterations = 10
+    iterations = 200
     sa_final_temperature = 100
 
     solutionlist = rand_solutionlist
     best_solutionlist = solutionlist
 
-    i = 0 # counter
-    while sa_temperature > sa_final_temperature or i < iterations:
-        print( "LNS: " , sa_temperature, i)
+    i = 0  # counter
+    while sa_temperature > sa_final_temperature and i < iterations:
+        print("LNS:", "t:", round(sa_temperature, 1), "i:", i)
         candidate_solution = repair(destroy(solutionlist))
 
         if accept(rmfs, demandlist, solutionlist, candidate_solution):
@@ -27,25 +28,30 @@ def lns(rmfs, rand_solutionlist, demandlist):
 
         i += 1
 
+    if sa_temperature <= sa_final_temperature:
+        print(f"STOP: Temperature {round(sa_temperature, 1)} below final temperature {sa_final_temperature}")
+    elif i >= iterations:
+        print(f"STOP: Iterations {i} reached maximum iterations {iterations}")
+
+    sa_temperature = 1000
     return best_solutionlist
 
 
-def destroy(sl):
+def destroy(solutionlist):
     percentage = 15
 
+    sl = solutionlist.copy()
     for i in range(len(sl)):
         if np.random.randint(100) <= percentage:
             sl[i] = -1
-
     return sl
 
 
-def repair(sl):  # TODO
-
+def repair(solutionlist):
+    sl = solutionlist.copy()
     for i in range(len(sl)):
         if sl[i] == -1:
             sl[i] = np.random.choice([0, 1], p=[0.999, 0.001])
-
     return sl
 
 
@@ -57,7 +63,6 @@ def accept(rmfs, demandlist, sl, sl_cand):
     storage, current_cost = rmfs.run(demandlist, sl)
     storage, neighbor_cost = rmfs.run(demandlist, sl_cand)
     cost_difference = neighbor_cost - current_cost
-    print("Accept: " , sa_temperature)
 
     if math.exp(-cost_difference / sa_temperature) > random.uniform(0, 1) or cost_difference < 0:
         sa_temperature *= cooling_factor  # cool temperature down
