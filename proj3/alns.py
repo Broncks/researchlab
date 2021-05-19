@@ -26,7 +26,7 @@ def alns(rmfs, rand_solutionlist, demandlist):
 
         repair = [repair1, repair2, repair3, repair4]
         index_repair = np.random.choice(range(len(repair)), p=weight_to_prob(weight_repair))
-        candidate_solution = repair[index_repair](destroyed_list)
+        candidate_solution = repair[index_repair](destroyed_list) #repair destroyed list & generate candidate solution
 
         print("ALNS:", "t:", round(sa_temperature, 1), "i:", str(i).zfill(2), "r:", index_repair, "d:", index_destroy,
               "wd:", [round(i, 1) for i in weight_destroy], "wr:", [round(i, 1) for i in weight_destroy])
@@ -70,22 +70,33 @@ def destroy1(solutionlist):
 
 def destroy2(solutionlist):
     sl = solutionlist.copy()
-    sl = destroy1(sl)
-    # TODO Implementation
+    random_counter = np.random.randint(0, 9)
+    random_part = random_counter * 1000
+    for i in range(1000):
+        sl[random_part] = -1
+        random_part += 1
+
     return sl
 
 
 def destroy3(solutionlist):
     sl = solutionlist.copy()
-    sl = destroy1(sl)
-    # TODO Implementation
+    for i in range(len(sl)):
+        rand_int = np.random.randint(0, 1)
+        if rand_int == 0:
+            if sl[i] >= 3:
+                sl[i] = -1
+
     return sl
 
 
 def destroy4(solutionlist):
     sl = solutionlist.copy()
-    sl = destroy1(sl)
-    # TODO Implementation
+    percentage = 30
+    for i in range(len(sl)):
+        if np.random.randint(100) <= percentage:
+            sl[i] = -1
+
     return sl
 
 
@@ -102,22 +113,25 @@ def repair1(solutionlist):
 
 def repair2(solutionlist):
     sl = solutionlist.copy()
-    sl = repair1(sl)
-    # TODO Implementation
+    for i in range(len(sl)):
+        if sl[i] == -1:
+            sl[i] = np.random.randint(0, 9)
     return sl
 
 
 def repair3(solutionlist):
     sl = solutionlist.copy()
-    sl = repair1(sl)
-    # TODO Implementation
+    for i in range(len(sl)):
+        if sl[i] == -1:
+            sl[i] = np.random.choice([0, 1, 2], p=[0.95, 0.025, 0.025])
     return sl
 
 
 def repair4(solutionlist):
     sl = solutionlist.copy()
-    sl = repair1(sl)
-    # TODO Implementation
+    for i in range(len(sl)):
+        if sl[i] == -1:
+            sl[i] = 0
     return sl
 
 
@@ -167,7 +181,7 @@ def update_probability(list, index, omega):
 def accept(rmfs, demandlist, sl, sl_cand, omega):
     """Implementation of SA to decided wether to accept candidate solutionlist"""
     global sa_temperature
-    cooling_factor = 0.9
+    cooling_factor = 0.95
 
     # determine storage & cost based on solutionlists provided in method-argument
     storage, current_cost = rmfs.run(demandlist, sl)

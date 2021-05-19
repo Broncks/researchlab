@@ -58,7 +58,7 @@ def repair(solutionlist):
 
 def accept(rmfs, demandlist, sl, sl_cand):
     global sa_temperature
-    cooling_factor = 0.9
+    cooling_factor = 0.95
 
     # determine storage & cost based on solutionlists provided in method-argument
     storage, current_cost = rmfs.run(demandlist, sl)

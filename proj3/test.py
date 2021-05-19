@@ -1,8 +1,8 @@
 from time import time
 from proj3.warehouse import RMFS
 from proj3.lns import *
-from proj3.alns import *
 from random import *
+from proj3.alns import *
 
 
 def read_demandlist(filename):
@@ -30,9 +30,10 @@ def main(list_number):
     initstorage = read_storage("initial_storage.txt")
     demandlist = read_demandlist(f'demandlist{list_number}.txt')
 
+     #TODO Warehouse
     rmfs = RMFS(initstorage, ppods, nplaces, nstations, qsize)
 
-    print("Random:")
+    print("Random:") #TODO Random
     start = time()
     solutionlist_rand = [randrange(0, max_placeid) for i in range(len(demandlist))]
     storage, cost = rmfs.run(demandlist, solutionlist_rand)
@@ -47,19 +48,17 @@ def main(list_number):
     print_stats(storage, cost, len(demandlist))
     end = time()
     print(f"Computing Time: {end - start}\n")
-
+    """
     print("Large Neighborhood Search:")
-    print("t:", "temperature", "i:", "iteration")
     start = time()
     solutionlist_lns = lns(rmfs, solutionlist_rand, demandlist)
     storage, cost = rmfs.run(demandlist, solutionlist_lns)
     print_stats(storage, cost, len(demandlist))
     end = time()
     print(f"Computing Time: {end - start}\n")
+    """
 
-    print("Adaptive Large Neighborhood Search:")
-    print("t:", "temperature", "i:", "iteration", "r:", "repair index", "d:", "destroy index",
-          "wd:", "weight destroy", "wr:", "weight repair")
+    print("Adapted Large Neighborhood Search:")
     start = time()
     solutionlist_lns = alns(rmfs, solutionlist_rand, demandlist)
     storage, cost = rmfs.run(demandlist, solutionlist_lns)
@@ -67,8 +66,9 @@ def main(list_number):
     end = time()
     print(f"Computing Time: {end - start}\n")
 
-
 if __name__ == '__main__':
     for i in range(3):
         print("Hauptschleife: ", i)
-        main(i + 1)
+        main(i+1)
+
+
