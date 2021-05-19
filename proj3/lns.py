@@ -35,6 +35,7 @@ def lns(rmfs, rand_solutionlist, demandlist):
 
     sa_temperature = 1000
     return best_solutionlist
+    #testpush
 
 
 def destroy(solutionlist):
