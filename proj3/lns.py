@@ -8,7 +8,7 @@ sa_temperature = 1000
 def lns(rmfs, rand_solutionlist, demandlist):
     global sa_temperature
     iterations = 200
-    sa_final_temperature = 100
+    sa_final_temperature = 50
 
     solutionlist = rand_solutionlist
     best_solutionlist = solutionlist
@@ -58,7 +58,7 @@ def repair(solutionlist):
 
 def accept(rmfs, demandlist, sl, sl_cand):
     global sa_temperature
-    cooling_factor = 0.95
+    cooling_factor = 0.98
 
     # determine storage & cost based on solutionlists provided in method-argument
     storage, current_cost = rmfs.run(demandlist, sl)

@@ -1,6 +1,6 @@
 from time import time
 from proj3.warehouse import RMFS
-from proj3.lns import *
+# from proj3.lns import *
 from proj3.alns import *
 from random import *
 
@@ -48,6 +48,7 @@ def main(list_number):
     end = time()
     print(f"Computing Time: {end - start}\n")
 
+    """ LNS has been replaced by ALNS
     print("Large Neighborhood Search:")
     print("t:", "temperature", "i:", "iteration")
     start = time()
@@ -56,6 +57,7 @@ def main(list_number):
     print_stats(storage, cost, len(demandlist))
     end = time()
     print(f"Computing Time: {end - start}\n")
+    """
 
     print("Adaptive Large Neighborhood Search:")
     print("t:", "temperature", "i:", "iteration", "r:", "repair index", "d:", "destroy index",
@@ -69,6 +71,6 @@ def main(list_number):
 
 
 if __name__ == '__main__':
-    for i in range(3):
-        print("Hauptschleife: ", i)
+    for i in range(3):  # Iterates the three demandlists and executes main() with them
+        print(f">> Demandlist {i}")
         main(i + 1)
