@@ -3,7 +3,11 @@ from proj3.warehouse import RMFS
 # from proj3.lns import *
 from proj3.alns import *
 from random import *
+from proj3.result_collector import Result_collector
+from proj3.output import *
+import copy
 
+all_results = Result_collector()
 
 def read_demandlist(filename):
     with open(filename) as f:
@@ -36,7 +40,12 @@ def main(list_number):
     start = time()
     solutionlist_rand = [randrange(0, max_placeid) for i in range(len(demandlist))]
     storage, cost = rmfs.run(demandlist, solutionlist_rand)
+
+    all_results.cost_random = cost
+    all_results.avg_cost_random = cost/len(solutionlist_rand)
+
     print_stats(storage, cost, len(demandlist))
+
     end = time()
     print(f"Computing Time: {end-start}\n")
 
@@ -44,6 +53,10 @@ def main(list_number):
     start = time()
     solutionlist_cheap = [0] * len(demandlist)
     storage, cost = rmfs.run(demandlist, solutionlist_cheap)
+
+    all_results.cost_greedy = cost
+    all_results.avg_cost_greedy = cost / len(solutionlist_rand)
+
     print_stats(storage, cost, len(demandlist))
     end = time()
     print(f"Computing Time: {end - start}\n")
@@ -65,12 +78,20 @@ def main(list_number):
     start = time()
     solutionlist_lns = alns(rmfs, solutionlist_rand, demandlist)
     storage, cost = rmfs.run(demandlist, solutionlist_lns)
+
+    all_results.cost_alns = cost
+    all_results.avg_cost_alns = cost / len(solutionlist_rand)
+
     print_stats(storage, cost, len(demandlist))
     end = time()
     print(f"Computing Time: {end - start}\n")
 
+    resultlist.append(copy.copy(all_results))
+
 
 if __name__ == '__main__':
+    resultlist = []
     for i in range(3):  # Iterates the three demandlists and executes main() with them
         print(f">> Demandlist {i}")
         main(i + 1)
+    createOutput(resultlist)

@@ -4,7 +4,6 @@ import random
 
 sa_temperature = 1000  # Start temperature of simulated annealing
 
-
 def alns(rmfs, rand_solutionlist, demandlist):  # Adaptive Large Neighborhood Search (ALNS)
     global sa_temperature
     iterations = 200
