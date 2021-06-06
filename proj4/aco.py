@@ -2,6 +2,9 @@
 # tau = Pheromone concentration
 # h = Heuristic function for the pheromone update
 # TODO: Parallelization (one ant one thread) & Synchronization
+import random
+import multiprocessing as mp
+
 
 def aco(rmfs, pi, h, f):
     solutionlist = []
@@ -33,3 +36,59 @@ def best(pi, s):
 
 def updateTrails(pi, s, tau):
     pass
+
+
+
+
+def multithreading():
+    def worker():
+        """worker function"""
+        print('Worker')
+        return
+
+    jobs = []
+    for i in range(5):
+        p = mp.Process(target=worker)
+        jobs.append(p)
+        p.start()
+
+    """
+    processes = []
+    manager = mp.Manager()
+    colonyResult = manager.list()
+
+    for _ in range(antPopulation):
+        ant = Ant([])
+        p = mp.Process(target=ant.createSolution())
+        processes.append(p)
+        p.start()
+
+    for process in processes:
+        process.join()"""
+
+
+
+class Ant:
+    def __init__(self, pheromone_list):  # Konstruktor
+        self.pl = pheromone_list.copy()
+        print("Ameise!")
+
+    def createSolution(self):
+        pissweg = [random.randint(0, 3) for i in range(10000)]
+        print("pissweg:", pissweg)
+        return pissweg
+
+
+class Colony:
+    ant_amount = 20
+    ant_list = []
+    for i in range(ant_amount):
+        ant_list.append(Ant([]))
+
+
+if __name__ == '__main__':
+    multithreading()
+    """
+    Colony()
+    ant = Ant([])
+    ant.createSolution()"""
