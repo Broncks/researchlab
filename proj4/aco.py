@@ -4,7 +4,11 @@
 # TODO: Parallelization (one ant one thread) & Synchronization
 import random
 import multiprocessing as mp
+import numpy as np
 
+
+pheromonlist = np.full((10000, 4), 1000)
+print('Wacka wacka', pheromonlist[500][3])
 
 def aco(rmfs, pi, h, f):
     solutionlist = []
@@ -40,17 +44,7 @@ def updateTrails(pi, s, tau):
 
 
 
-def multithreading():
-    def worker():
-        """worker function"""
-        print('Worker')
-        return
 
-    jobs = []
-    for i in range(5):
-        p = mp.Process(target=worker)
-        jobs.append(p)
-        p.start()
 
     """
     processes = []
@@ -83,11 +77,11 @@ class Colony:
     ant_amount = 20
     ant_list = []
     for i in range(ant_amount):
-        ant_list.append(Ant([]))
+        ant_list.append(Ant(pheromonlist))
 
 
 if __name__ == '__main__':
-    multithreading()
+
     """
     Colony()
     ant = Ant([])
