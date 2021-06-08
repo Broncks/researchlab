@@ -7,7 +7,7 @@ import numpy as np
 
 def aco(rmfs, demandlist, rand_solutionlist):
     ANT_POPULATION = 25
-    MAX_ITERATIONS = 1 # 100
+    MAX_ITERATIONS = 100
     EVAPORATION_FACTOR = 0.7
     MAX_PLACE = 4
 
@@ -20,6 +20,7 @@ def aco(rmfs, demandlist, rand_solutionlist):
     iterations = 0
     while iterations < MAX_ITERATIONS:
         print(f'Iteration: {iterations}')
+        print(pheromonelist)
         solutionlist = colony.iterate()
         storage_sl, cost_sl = rmfs.run(demandlist, solutionlist)
         storage_best, cost_best = rmfs.run(demandlist, best_solutionlist)
@@ -76,7 +77,8 @@ class Colony:
 
         cost_list_sorted = sorted(zip(cost_list, pisswege))  # descending order
         best_solution_zip = cost_list_sorted[0]
-        cost, best_solution = zip(*best_solution_zip)  # TODO: Irgendein Error, Listen trennen
+        cost, solution = best_solution_zip  # TODO: Irgendein Error, Listen trennen
+        best_solution = solution
 
         self.update_pheromones(pisswege, cost_list)
         self.weightlist = self.weight_to_prob(self.pheromonelist)
