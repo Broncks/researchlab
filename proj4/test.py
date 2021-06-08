@@ -49,7 +49,9 @@ def main(list_number):
 
     print("Ant Colony Optimization:")
     start = time()
-    aco(rmfs, demandlist)
+    solutionlist_aco = aco(rmfs, demandlist, solutionlist_rand)
+    storage, cost = rmfs.run(demandlist, solutionlist_aco)
+    print_stats(storage, cost, len(demandlist))
     end = time()
     print(f"Computing Time: {end - start}\n")
 
