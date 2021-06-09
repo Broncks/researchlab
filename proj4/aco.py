@@ -73,8 +73,6 @@ class Colony:
             pisswege.append(self.ant_list[i].createSolution(self.weightlist))
             storage, cost = self.warehouse.run(self.demandlist, pisswege[i])
             cost_list.append(cost)
-        print("Costlist:", sorted(cost_list))
-        print("Solution WL:", self.weightlist)
 
         cost_list_sorted = sorted(zip(cost_list, pisswege))  # descending order
         best_solution_zip = cost_list_sorted[0]
