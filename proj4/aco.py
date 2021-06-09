@@ -7,12 +7,12 @@ import numpy as np
 
 def aco(rmfs, demandlist, rand_solutionlist):
     ANT_POPULATION = 25
-    MAX_ITERATIONS = 100
-    EVAPORATION_FACTOR = 0.7
+    MAX_ITERATIONS = 10  # 100
+    EVAPORATION_FACTOR = 0.8
     MAX_PLACE = 4
 
     solutionlist = []
-    best_solutionlist = rand_solutionlist.copy()  # Ist das wirklich eine leere Liste? Siehe Folie 14/29 Zeile 2
+    best_solutionlist = rand_solutionlist.copy()
     pheromonelist = np.full((len(demandlist), MAX_PLACE), 1000.0)  # initTrails(demandlist)
 
     colony = Colony(rmfs, pheromonelist, demandlist, ANT_POPULATION, EVAPORATION_FACTOR, MAX_PLACE)
@@ -44,11 +44,10 @@ class Ant:
         self.MAX_PLACE = MAX_PLACE
         print("Ameise!")
 
-    def createSolution(self):
+    def createSolution(self, weightlist):
         pissweg = []
-        print("Solution WL")
-        for i in range(len(self.weightlist)):
-            pissweg.append(np.random.choice(range(self.MAX_PLACE), p=self.weightlist[i]))
+        for i in range(len(weightlist)):
+            pissweg.append(np.random.choice(range(self.MAX_PLACE), p=weightlist[i]))
         return pissweg
 
 
@@ -71,9 +70,11 @@ class Colony:
         pisswege = []
         cost_list = []
         for i in range(len(self.ant_list)):
-            pisswege.append(self.ant_list[i].createSolution())
+            pisswege.append(self.ant_list[i].createSolution(self.weightlist))
             storage, cost = self.warehouse.run(self.demandlist, pisswege[i])
             cost_list.append(cost)
+        print("Costlist:", sorted(cost_list))
+        print("Solution WL:", self.weightlist)
 
         cost_list_sorted = sorted(zip(cost_list, pisswege))  # descending order
         best_solution_zip = cost_list_sorted[0]
@@ -117,7 +118,9 @@ class Colony:
                 for k in range(len(pisswege)):
                     if pisswege[k][i] == j:
                         sum_cost += cost_list[k]
+                # print(f'[{i}][{j}] Sumcost: {sum_cost}')
 
-                self.pheromonelist[i][j] = self.pheromonelist[i][j] * (1 - self.EVAPORATION_FACTOR) \
-                                           + self.EVAPORATION_FACTOR * master_table[i][j] * sum_cost
+                self.pheromonelist[i][j] = (1 - self.EVAPORATION_FACTOR) * self.pheromonelist[i][j]\
+                                           + self.EVAPORATION_FACTOR * sum_cost
+                self.pheromonelist[i][j] = round(self.pheromonelist[i][j])
                 # SUMME ALLER KOSTEN DER LÖSUNGEN (f(s) IN EINEM FELD i,j) OR 0
