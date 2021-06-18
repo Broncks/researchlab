@@ -1,6 +1,7 @@
 from time import time
-from Source.project2.warehouse import RMFS
+from proj5.warehouse import RMFS
 from random import *
+from proj5.ga import *
 
 
 def read_demandlist(filename):
@@ -18,7 +19,7 @@ def print_stats(storage, cost, steps):
     print(f"Total cost: {cost}")
     print(f"Avg. cost per pod movement: {cost/steps/2}")
 
-def main():
+def main(list_number):
     ppods = .75
     nplaces = 20
     nstations = 2
@@ -26,7 +27,7 @@ def main():
     max_placeid = nplaces - int(ppods*nplaces) + nstations*qsize
 
     initstorage = read_storage("initial_storage.txt")
-    demandlist = read_demandlist('demandlist.txt')
+    demandlist = read_demandlist(f'demandlist{list_number}.txt')
 
     rmfs = RMFS(initstorage, ppods, nplaces, nstations, qsize)
 
@@ -46,12 +47,15 @@ def main():
     end = time()
     print(f"Computing Time: {end - start}\n")
 
-    print("Large Neighborhood Search:")
+    print("GA:")
     start = time()
-    # WRITE YOUR CODE HERE
+    ga(demandlist, rmfs)
+
     end = time()
     print(f"Computing Time: {end - start}\n")
 
 
 if __name__ == '__main__':
-    main()
+    for i in range(3):  # Iterates the three demandlists and executes main() with them
+        print(f">> Demandlist {i}")
+        main(i+1)
