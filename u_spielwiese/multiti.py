@@ -35,7 +35,7 @@ if __name__ == '__main__':
 
 
     process1 = Process(target=meineFunc())
-    #process2 = Process(target=meineFunc())
+    process2 = Process(target=meineFunc())
 
     process1.start()
     #process2.start()
