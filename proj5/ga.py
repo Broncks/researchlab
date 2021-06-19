@@ -81,11 +81,11 @@ class Population:
                 for j in range(MUTATION_SPAN):
                     # Einteilung in drei Teile, der mittlere wird inversed
                     children_list[i].genelist = children_list[i].genelist[0:mutation_pointer - 1] + \
-                                                children_             mutation_pointer:mutation_pointer - MUTATION_SPAN] + \
+                                                children_list[i].genelist[
+                                                mutation_pointer:mutation_pointer - MUTATION_SPAN] + \
                                                 children_list[i].genelist[
                                                 mutation_pointer + MUTATION_SPAN + 1:len(children_list[i].genelist)]
-        children1 = children_list[0]list[i].genelist[
-
+        children1 = children_list[0]
         children2 = children_list[1]
         return children1, children2
 
