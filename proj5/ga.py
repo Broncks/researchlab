@@ -73,8 +73,9 @@ class Population:
         MUTATION_PROBABILITY = 0.05
         NUM_OF_MUTATIONS = 1
         children_list = [children1, children2]
-        for i in range(children_list):
-            mutation_starter = np.random.choice(0, 1, p=[1 - MUTATION_PROBABILITY, MUTATION_PROBABILITY])
+        for i in range(len(children_list)):
+            print(f"1-MUT_PROB {1- MUTATION_PROBABILITY}")
+            mutation_starter = np.random.choice([0, 1], p=[1 - MUTATION_PROBABILITY, MUTATION_PROBABILITY])
             if mutation_starter == 1:
                 mutation_pointer = np.random.choice(range(len(children_list[i].genelist) - MUTATION_SPAN))
                 for j in range(MUTATION_SPAN):
@@ -90,16 +91,25 @@ class Population:
 
     def survivor_selection(self):
         # Fitness Based
+        lowest_parent = 999999 #initialwert
 
-        pass
+        for i in range(len(self.chromosome_list)):
+            if lowest_parent > self.chromosome_list[i].cost:
+                lowest_parent_position = i
+
+
+            self.children_list
+            #TODO hier gehts weiter
+
 
     def create_children(self, num_of_children):
         mutated_children_list = []
-        for i in range(num_of_children / 2):
+        for i in range(int(num_of_children / 2)):
             parent1, parent2 = self.parent_selection(self.chromosome_list)
             children1, children2 = self.crossover(parent1, parent2)
             mutated_child1, mutated_child2 = self.mutation(children1, children2)
-            mutated_children_list.append(mutated_child1, mutated_child2)
+            mutated_children_list.append(mutated_child1)
+            mutated_children_list.append(mutated_child2)
         self.children_list = mutated_children_list
 
 
