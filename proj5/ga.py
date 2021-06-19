@@ -1,25 +1,39 @@
 from random import *
 import numpy as np
 
+ITERATIONS = 10
 POPULATION_SIZE = 10
-MAX_PLACE_ID = 4
-NUM_OF_CHILDREN = 2  # only even numbers e.g. 2/4/6/8/...
+ELITE_PERCENTAGE = 0.2
+MAX_PLACE = 4
+NUM_OF_CHILDREN = POPULATION_SIZE * ELITE_PERCENTAGE
 
 
 def ga(demandlist, rmfs):
-    population = Population(demandlist, rmfs)
-
+    population = Population(demandlist, rmfs, ELITE_PERCENTAGE)
     population.create_children(NUM_OF_CHILDREN)
-    population.survivor_selection()
+
+    i = 0
+    while i < ITERATIONS:  # TODO: Termination criterion Folie S. 57/62
+        # TODO: iterate iterate iterate
+        parent1, parent2 = population.parent_selection(population.chromosome_list)
+        child1, child2 = population.crossover(parent1, parent2)
+        child1, child2 = population.mutation(child1, child2)
+        population.survivor_selection()
+        print(f'Iteration {i+1}')
+        i += 1
+
+    population.chromosome_list.sort(key=lambda x: x.cost)
+    return population.chromosome_list[0].genelist
 
 
 class Population:
 
-    def __init__(self, demandlist, rmfs):
+    def __init__(self, demandlist, rmfs, ELITE_PERCENTAGE):
         self.rmfs = rmfs
         self.demandlist = demandlist
-        self.chromosome_list = self.create_init_population(POPULATION_SIZE, demandlist, MAX_PLACE_ID)
+        self.chromosome_list = self.create_init_population(POPULATION_SIZE, demandlist, MAX_PLACE)
         self.children_list = []
+        self.ELITE_PERCENTAGE = ELITE_PERCENTAGE
         print(f"Meine Chromosomliste {len(self.chromosome_list)}")
         print(f"RandChromosomliste ausgabe {self.chromosome_list[0].genelist}")
 
@@ -33,20 +47,19 @@ class Population:
 
     def parent_selection(self, chromosome_list):
         # Tournament
-        candidate1 = chromosome_list[np.random.choice(len(chromosome_list))]
-        candidate2 = chromosome_list[np.random.choice(len(chromosome_list))]
-        candidate3 = chromosome_list[np.random.choice(len(chromosome_list))]
-        candidate4 = chromosome_list[np.random.choice(len(chromosome_list))]
+        candidate = []
+        for i in range(4):
+            candidate.append(chromosome_list[np.random.choice(len(chromosome_list))])
 
-        if candidate1.cost > candidate2.cost:
-            parent1 = candidate1
+        if candidate[0].cost > candidate[1].cost:
+            parent1 = candidate[0]
         else:
-            parent1 = candidate2
+            parent1 = candidate[1]
 
-        if candidate3.cost > candidate4.cost:
-            parent2 = candidate3
+        if candidate[2].cost > candidate[3].cost:
+            parent2 = candidate[2]
         else:
-            parent2 = candidate4
+            parent2 = candidate[3]
 
         return parent1, parent2
 
@@ -56,8 +69,8 @@ class Population:
         parent1half1 = parent1.genelist[:len(parent1.genelist) // 2]
         parent1half2 = parent1.genelist[len(parent1.genelist) // 2:]
 
-        parent2half1 = parent1.genelist[:len(parent1.genelist) // 2]
-        parent2half2 = parent1.genelist[len(parent1.genelist) // 2:]
+        parent2half1 = parent2.genelist[:len(parent2.genelist) // 2]
+        parent2half2 = parent2.genelist[len(parent2.genelist) // 2:]
 
         genelist1 = parent1half1 + parent2half2
         genelist2 = parent2half1 + parent1half2
@@ -91,16 +104,14 @@ class Population:
 
     def survivor_selection(self):
         # Fitness Based
-        lowest_parent = 999999 #initialwert
+        self.chromosome_list.sort(key=lambda x: x.cost)
 
-        for i in range(len(self.chromosome_list)):
-            if lowest_parent > self.chromosome_list[i].cost:
-                lowest_parent_position = i
+        for i in range(int(len(self.chromosome_list) * self.ELITE_PERCENTAGE)):
+            self.chromosome_list.pop()
 
-
-            self.children_list
-            #TODO hier gehts weiter
-
+        for child in self.children_list:
+            self.chromosome_list.append(child)
+        #TODO hier gehts weiter (oder war's das schon?)
 
     def create_children(self, num_of_children):
         mutated_children_list = []
@@ -117,10 +128,11 @@ class Chromosome:
     def __init__(self, genelist, rmfs, demandlist):
         self.genelist = genelist
         self.rmfs = rmfs
+        self.demandlist = demandlist
 
         storage, self.cost = self.rmfs.run(demandlist, self.genelist)
 
         print(f"Erzeuge Kosten von {self.cost}")
 
-    def recalc_fitness(self):
+    def recalc_fitness(self):  # TODO: Aufruf in mutation (?)
         self.cost = self.rmfs.run(self.demandlist, self.genelist)

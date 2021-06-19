@@ -3,5 +3,5 @@ class Result_collector:
     avg_cost_random = 0
     cost_greedy = 0
     avg_cost_greedy = 0
-    cost_aco = 0
-    avg_cost_aco = 0
+    cost_ga = 0
+    avg_cost_ga = 0

@@ -55,7 +55,7 @@ def main(list_number):
     print_stats(storage, cost, len(demandlist))
 
     all_results.cost_greedy = cost
-    all_results.avg_cost_greedy = cost / len(solutionlist_rand) / 2
+    all_results.avg_cost_greedy = cost / len(solutionlist_cheap) / 2
 
     end = time()
     print(f"Computing Time: {end - start}\n")
@@ -67,8 +67,8 @@ def main(list_number):
     storage, cost = rmfs.run(demandlist, solutionlist_ga)
     print_stats(storage, cost, len(demandlist))
 
-    all_results.cost_greedy = cost
-    all_results.avg_cost_greedy = cost / len(solutionlist_rand) / 2
+    all_results.cost_ga = cost
+    all_results.avg_cost_ga = cost / len(solutionlist_ga) / 2
 
     end = time()
     print(f"Computing Time: {end - start}\n")

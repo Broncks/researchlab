@@ -25,7 +25,7 @@ def createOutput(resultlist):
         outWorksheet.write(i + 1, 3, resultlist[i].cost_greedy)
         outWorksheet.write(i + 1, 4, resultlist[i].avg_cost_greedy)
 
-        outWorksheet.write(i + 1, 5, resultlist[i].cost_aco)
-        outWorksheet.write(i + 1, 6, resultlist[i].avg_cost_aco)
+        outWorksheet.write(i + 1, 5, resultlist[i].cost_ga)
+        outWorksheet.write(i + 1, 6, resultlist[i].avg_cost_ga)
 
     outWorkbook.close()
