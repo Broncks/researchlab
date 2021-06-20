@@ -19,7 +19,7 @@ def ga(demandlist, rmfs):
         child1, child2 = population.crossover(parent1, parent2)
         child1, child2 = population.mutation(child1, child2)
         population.survivor_selection()
-        print(f'Iteration {i+1}')
+        print(f'Iteration {i + 1}')
         i += 1
 
     population.chromosome_list.sort(key=lambda x: x.cost)
@@ -34,8 +34,8 @@ class Population:
         self.chromosome_list = self.create_init_population(POPULATION_SIZE, demandlist, MAX_PLACE)
         self.children_list = []
         self.ELITE_PERCENTAGE = ELITE_PERCENTAGE
-        print(f"Meine Chromosomliste {len(self.chromosome_list)}")
-        print(f"RandChromosomliste ausgabe {self.chromosome_list[0].genelist}")
+        # print(f"Meine Chromosomliste {len(self.chromosome_list)}")
+        # print(f"RandChromosomliste ausgabe {self.chromosome_list[0].genelist}")
 
     def create_init_population(self, population_size, demandlist, MAX_PLACE_ID):
         chromosome_list = []
@@ -65,7 +65,7 @@ class Population:
 
     def crossover(self, parent1, parent2):
         # One Point Crossover (Split in half)
-        print("Parent1 ", parent1)
+
         parent1half1 = parent1.genelist[:len(parent1.genelist) // 2]
         parent1half2 = parent1.genelist[len(parent1.genelist) // 2:]
 
@@ -75,6 +75,8 @@ class Population:
         genelist1 = parent1half1 + parent2half2
         genelist2 = parent2half1 + parent1half2
 
+
+
         children1 = Chromosome(genelist1, self.rmfs, self.demandlist)
         children2 = Chromosome(genelist2, self.rmfs, self.demandlist)
 
@@ -82,22 +84,36 @@ class Population:
 
     def mutation(self, children1, children2):
         # Inversion
-        MUTATION_SPAN = 6
-        MUTATION_PROBABILITY = 0.05
+        MUTATION_SPAN = 1000
+        MUTATION_PROBABILITY = 0.5  # 0.05
         NUM_OF_MUTATIONS = 1
         children_list = [children1, children2]
+        print(children_list)
+        print("children_list1", len(children_list[0].genelist))
+        print("children_list2", len(children_list[1].genelist))
         for i in range(len(children_list)):
-            print(f"1-MUT_PROB {1- MUTATION_PROBABILITY}")
+
             mutation_starter = np.random.choice([0, 1], p=[1 - MUTATION_PROBABILITY, MUTATION_PROBABILITY])
             if mutation_starter == 1:
-                mutation_pointer = np.random.choice(range(len(children_list[i].genelist) - MUTATION_SPAN))
-                for j in range(MUTATION_SPAN):
-                    # Einteilung in drei Teile, der mittlere wird inversed
-                    children_list[i].genelist = children_list[i].genelist[0:mutation_pointer - 1] + \
-                                                children_list[i].genelist[
-                                                mutation_pointer:mutation_pointer - MUTATION_SPAN] + \
-                                                children_list[i].genelist[
-                                                mutation_pointer + MUTATION_SPAN + 1:len(children_list[i].genelist)]
+                mutation_pointer = np.random.choice(range(MUTATION_SPAN, len(children_list[i].genelist) - MUTATION_SPAN))
+                # Einteilung in drei Teile, der mittlere wird inversed
+                children_list_part1 = children_list[i].genelist[0:mutation_pointer - 1]
+                print("Mutation Pointer", mutation_pointer)
+
+                print("Children list middle part",
+                      children_list[i].genelist[mutation_pointer - MUTATION_SPAN: mutation_pointer])
+                print("Children list middle part rev",
+                      list(
+                          reversed(children_list[i].genelist[mutation_pointer - MUTATION_SPAN: mutation_pointer])))
+
+                children_list_part2 = list(
+                    reversed(children_list[i].genelist[mutation_pointer - MUTATION_SPAN : mutation_pointer]))
+                children_list_part3 = children_list[i].genelist[
+                                      mutation_pointer + MUTATION_SPAN + 1:len(children_list[i].genelist)]
+
+                children_list[i].genelist = children_list_part1 + children_list_part2 + children_list_part3
+                children_list[i].recalc_fitness()
+
         children1 = children_list[0]
         children2 = children_list[1]
         return children1, children2
@@ -111,7 +127,7 @@ class Population:
 
         for child in self.children_list:
             self.chromosome_list.append(child)
-        #TODO hier gehts weiter (oder war's das schon?)
+        # TODO hier gehts weiter (oder war's das schon?)
 
     def create_children(self, num_of_children):
         mutated_children_list = []
@@ -135,4 +151,6 @@ class Chromosome:
         print(f"Erzeuge Kosten von {self.cost}")
 
     def recalc_fitness(self):  # TODO: Aufruf in mutation (?)
-        self.cost = self.rmfs.run(self.demandlist, self.genelist)
+        print("Kosten vor fitness ",self.cost)
+        storage, self.cost = self.rmfs.run(self.demandlist, self.genelist)
+        print("Kosten durch Fitness Func nach Mutation angepasst auf:", self.cost)
