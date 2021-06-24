@@ -1,10 +1,10 @@
 from random import *
 import numpy as np
 
-ITERATIONS = 10
+ITERATIONS = 30
 POPULATION_SIZE = 10
-ELITE_PERCENTAGE = 0.2
-MAX_PLACE = 4
+ELITE_PERCENTAGE = 0.8
+MAX_PLACE = 3
 NUM_OF_CHILDREN = POPULATION_SIZE * ELITE_PERCENTAGE
 
 
@@ -67,15 +67,13 @@ class Population:
         else:
             parent2 = candidate[3]
 
-        print("parent_selection() parent1.genelist len", len(parent1.genelist))
-        print("parent_selection() parent2.genelist len", len(parent2.genelist))
+
         return parent1, parent2
 
     def crossover(self, parent1, parent2):
         # One Point Crossover (Split in half)
 
-        print("parent1.genelist ", len(parent1.genelist))
-        print("parent2.genelist ", len(parent2.genelist))
+
 
         parent1half1 = parent1.genelist[:len(parent1.genelist) // 2]
         parent1half2 = parent1.genelist[len(parent1.genelist) // 2:]
@@ -87,10 +85,7 @@ class Population:
         genelist2 = parent2half1 + parent1half2
 
 
-        print("parent1half1 ", len(parent1half1))
-        print("parent1half2 ", len(parent1half2))
-        print("parent2half1 ", len(parent2half1))
-        print("parent2half2 ", len(parent2half2))
+
 
         children1 = Chromosome(genelist1, self.rmfs, self.demandlist)
         children2 = Chromosome(genelist2, self.rmfs, self.demandlist)
@@ -104,8 +99,7 @@ class Population:
 
         children_list = [children1, children2]
 
-        print("mutation()children1 len ", len(children_list[0].genelist))
-        print("mutation()children2 len ", len(children_list[1].genelist))
+
         for i in range(len(children_list)):
 
             mutation_starter = np.random.choice([0, 1], p=[1 - MUTATION_PROBABILITY, MUTATION_PROBABILITY])
@@ -119,7 +113,7 @@ class Population:
                     reversed(children_list[i].genelist[mutation_pointer - MUTATION_SPAN : mutation_pointer]))
                 children_list_part3 = children_list[i].genelist[
                                       mutation_pointer + MUTATION_SPAN:len(children_list[i].genelist)]
-                print("Mutant len ", len(children_list_part1 + children_list_part2 + children_list_part3))
+
                 children_list[i].genelist = children_list_part1 + children_list_part2 + children_list_part3
                 children_list[i].recalc_fitness()
 
@@ -132,6 +126,7 @@ class Population:
         self.chromosome_list.sort(key=lambda x: x.cost)
 
         for i in range(int(len(self.chromosome_list) * self.ELITE_PERCENTAGE)):
+
             self.chromosome_list.pop()
 
         for child in self.children_list:
@@ -142,9 +137,7 @@ class Population:
         mutated_children_list = []
         for i in range(int(num_of_children / 2)):
 
-            #Just debugging
-            for j in range(len(self.chromosome_list)):
-                print("Umpalumpa ", len(self.chromosome_list[j].genelist))
+
 
             parent1, parent2 = self.parent_selection()
             children1, children2 = self.crossover(parent1, parent2)
