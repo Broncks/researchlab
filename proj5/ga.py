@@ -1,7 +1,7 @@
 from random import *
 import numpy as np
 
-ITERATIONS = 1
+ITERATIONS = 40
 POPULATION_SIZE = 10
 ELITE_PERCENTAGE = 0.8
 MAX_PLACE = 3
