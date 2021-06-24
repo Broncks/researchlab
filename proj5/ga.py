@@ -43,7 +43,6 @@ class Population:
     def get_best_solution(self):
         return self.best_solution
 
-
     def create_init_population(self, population_size, demandlist, MAX_PLACE_ID):
         chromosome_list = []
         for i in range(population_size):
@@ -89,7 +88,7 @@ class Population:
 
         return children1, children2
 
-    def mutation(self, children1, children2):
+    def mutation1(self, children1, children2):
         # Inversion
         MUTATION_SPAN = 1000
         MUTATION_PROBABILITY = 0.5  # 0.05
@@ -117,6 +116,38 @@ class Population:
         children2 = children_list[1]
         return children1, children2
 
+    def mutation2(self, children1, children2):
+        # Bit Flipping
+        MUTATION_SPAN = 1000
+        MUTATION_PROBABILITY = 0.5  # 0.05
+
+        children_list = [children1, children2]
+
+        for i in range(len(children_list)):
+
+            mutation_starter = np.random.choice([0, 1], p=[1 - MUTATION_PROBABILITY, MUTATION_PROBABILITY])
+            if mutation_starter == 1:
+                mutation_pointer = np.random.choice(
+                    range(MUTATION_SPAN, len(children_list[i].genelist) - MUTATION_SPAN))
+                # Einteilung in drei Teile, der mittlere wird inversed
+                children_list_part1 = children_list[i].genelist[0:mutation_pointer]
+
+                children_list_part2 = []
+                for j in range(MUTATION_SPAN):
+                    children_list_part2.append(np.random.choice([0, 1]))
+
+                print("Länge der children_list_part2 ", len(children_list_part2))
+
+                children_list_part3 = children_list[i].genelist[
+                                      mutation_pointer + MUTATION_SPAN:len(children_list[i].genelist)]
+
+                children_list[i].genelist = children_list_part1 + children_list_part2 + children_list_part3
+                children_list[i].recalc_fitness()
+
+        children1 = children_list[0]
+        children2 = children_list[1]
+        return children1, children2
+
     def survivor_selection(self):
         # Fitness Based
         self.chromosome_list.sort(key=lambda x: x.cost)
@@ -130,18 +161,15 @@ class Population:
         self.chromosome_list.sort(key=lambda x: x.cost)
         self.best_solution = self.chromosome_list[0].cost
 
-
     def create_children(self, num_of_children):
         mutated_children_list = []
         for i in range(int(num_of_children / 2)):
             parent1, parent2 = self.parent_selection()
             children1, children2 = self.crossover(parent1, parent2)
-            mutated_child1, mutated_child2 = self.mutation(children1, children2)
+            mutated_child1, mutated_child2 = self.mutation2(children1, children2)
             mutated_children_list.append(mutated_child1)
             mutated_children_list.append(mutated_child2)
         self.children_list = mutated_children_list
-
-
 
 
 class Chromosome:
