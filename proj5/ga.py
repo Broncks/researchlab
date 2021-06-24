@@ -2,7 +2,7 @@ from random import *
 import numpy as np
 
 ITERATIONS = 30
-POPULATION_SIZE = 10
+POPULATION_SIZE = 40
 ELITE_PERCENTAGE = 0.8
 MAX_PLACE = 3
 NUM_OF_CHILDREN = POPULATION_SIZE * ELITE_PERCENTAGE
@@ -37,8 +37,6 @@ class Population:
         self.best_solution = 0
         self.children_list = []
         self.ELITE_PERCENTAGE = ELITE_PERCENTAGE
-        # print(f"Meine Chromosomliste {len(self.chromosome_list)}")
-        # print(f"RandChromosomliste ausgabe {self.chromosome_list[0].genelist}")
 
     def get_best_solution(self):
         return self.best_solution
@@ -180,9 +178,5 @@ class Chromosome:
 
         storage, self.cost = self.rmfs.run(demandlist, self.genelist)
 
-        print(f"Erzeuge Kosten von {self.cost}")
-
     def recalc_fitness(self):
-        print("Kosten vor fitness ", self.cost)
         storage, self.cost = self.rmfs.run(self.demandlist, self.genelist)
-        print("Kosten durch Fitness Func nach Mutation angepasst auf:", self.cost)
