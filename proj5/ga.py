@@ -10,14 +10,15 @@ NUM_OF_CHILDREN = POPULATION_SIZE * ELITE_PERCENTAGE
 
 def ga(demandlist, rmfs):
     population = Population(demandlist, rmfs, ELITE_PERCENTAGE)
-    population.create_children(NUM_OF_CHILDREN)
+
 
     i = 0
     while i < ITERATIONS:  # TODO: Termination criterion Folie S. 57/62
         # TODO: iterate iterate iterate
-        parent1, parent2 = population.parent_selection(population.chromosome_list)
-        child1, child2 = population.crossover(parent1, parent2)
-        child1, child2 = population.mutation(child1, child2)
+        population.create_children(NUM_OF_CHILDREN)
+        #parent1, parent2 = population.parent_selection(population.chromosome_list)
+        #child1, child2 = population.crossover(parent1, parent2)
+        #child1, child2 = population.mutation(child1, child2)
         population.survivor_selection()
         print(f'Iteration {i + 1}')
         i += 1
@@ -32,6 +33,7 @@ class Population:
         self.rmfs = rmfs
         self.demandlist = demandlist
         self.chromosome_list = self.create_init_population(POPULATION_SIZE, demandlist, MAX_PLACE)
+
         self.children_list = []
         self.ELITE_PERCENTAGE = ELITE_PERCENTAGE
         # print(f"Meine Chromosomliste {len(self.chromosome_list)}")
@@ -43,13 +45,17 @@ class Population:
             chromosome_list.append(
                 Chromosome([randrange(0, MAX_PLACE_ID) for i in range(len(demandlist))], self.rmfs, demandlist))
             # TODO Vielleicht ist es Sinnvoll eine Gewichtung der Einträge zu erstellen, um dem Algo die nötigen Einträge zu liefern. Kann aber auch sein, dass das so klappt
+
+
         return chromosome_list
 
-    def parent_selection(self, chromosome_list):
+    def parent_selection(self):
         # Tournament
+
+
         candidate = []
         for i in range(4):
-            candidate.append(chromosome_list[np.random.choice(len(chromosome_list))])
+            candidate.append(self.chromosome_list[np.random.choice(len(self.chromosome_list))])
 
         if candidate[0].cost > candidate[1].cost:
             parent1 = candidate[0]
@@ -61,10 +67,15 @@ class Population:
         else:
             parent2 = candidate[3]
 
+        print("parent_selection() parent1.genelist len", len(parent1.genelist))
+        print("parent_selection() parent2.genelist len", len(parent2.genelist))
         return parent1, parent2
 
     def crossover(self, parent1, parent2):
         # One Point Crossover (Split in half)
+
+        print("parent1.genelist ", len(parent1.genelist))
+        print("parent2.genelist ", len(parent2.genelist))
 
         parent1half1 = parent1.genelist[:len(parent1.genelist) // 2]
         parent1half2 = parent1.genelist[len(parent1.genelist) // 2:]
@@ -76,6 +87,10 @@ class Population:
         genelist2 = parent2half1 + parent1half2
 
 
+        print("parent1half1 ", len(parent1half1))
+        print("parent1half2 ", len(parent1half2))
+        print("parent2half1 ", len(parent2half1))
+        print("parent2half2 ", len(parent2half2))
 
         children1 = Chromosome(genelist1, self.rmfs, self.demandlist)
         children2 = Chromosome(genelist2, self.rmfs, self.demandlist)
@@ -86,31 +101,25 @@ class Population:
         # Inversion
         MUTATION_SPAN = 1000
         MUTATION_PROBABILITY = 0.5  # 0.05
-        NUM_OF_MUTATIONS = 1
+
         children_list = [children1, children2]
-        print(children_list)
-        print("children_list1", len(children_list[0].genelist))
-        print("children_list2", len(children_list[1].genelist))
+
+        print("mutation()children1 len ", len(children_list[0].genelist))
+        print("mutation()children2 len ", len(children_list[1].genelist))
         for i in range(len(children_list)):
 
             mutation_starter = np.random.choice([0, 1], p=[1 - MUTATION_PROBABILITY, MUTATION_PROBABILITY])
             if mutation_starter == 1:
                 mutation_pointer = np.random.choice(range(MUTATION_SPAN, len(children_list[i].genelist) - MUTATION_SPAN))
                 # Einteilung in drei Teile, der mittlere wird inversed
-                children_list_part1 = children_list[i].genelist[0:mutation_pointer - 1]
-                print("Mutation Pointer", mutation_pointer)
+                children_list_part1 = children_list[i].genelist[0:mutation_pointer]
 
-                print("Children list middle part",
-                      children_list[i].genelist[mutation_pointer - MUTATION_SPAN: mutation_pointer])
-                print("Children list middle part rev",
-                      list(
-                          reversed(children_list[i].genelist[mutation_pointer - MUTATION_SPAN: mutation_pointer])))
 
                 children_list_part2 = list(
                     reversed(children_list[i].genelist[mutation_pointer - MUTATION_SPAN : mutation_pointer]))
                 children_list_part3 = children_list[i].genelist[
-                                      mutation_pointer + MUTATION_SPAN + 1:len(children_list[i].genelist)]
-
+                                      mutation_pointer + MUTATION_SPAN:len(children_list[i].genelist)]
+                print("Mutant len ", len(children_list_part1 + children_list_part2 + children_list_part3))
                 children_list[i].genelist = children_list_part1 + children_list_part2 + children_list_part3
                 children_list[i].recalc_fitness()
 
@@ -132,13 +141,20 @@ class Population:
     def create_children(self, num_of_children):
         mutated_children_list = []
         for i in range(int(num_of_children / 2)):
-            parent1, parent2 = self.parent_selection(self.chromosome_list)
+
+            #Just debugging
+            for j in range(len(self.chromosome_list)):
+                print("Umpalumpa ", len(self.chromosome_list[j].genelist))
+
+            parent1, parent2 = self.parent_selection()
             children1, children2 = self.crossover(parent1, parent2)
             mutated_child1, mutated_child2 = self.mutation(children1, children2)
             mutated_children_list.append(mutated_child1)
             mutated_children_list.append(mutated_child2)
         self.children_list = mutated_children_list
 
+    def kill_children(self):
+        self.children_list = []
 
 class Chromosome:
     def __init__(self, genelist, rmfs, demandlist):
