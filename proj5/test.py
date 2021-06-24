@@ -63,7 +63,7 @@ def main(list_number):
 
     print("GA:")
     start = time()
-    solutionlist_ga = ga(demandlist, rmfs)
+    solutionlist_ga = ga(demandlist, rmfs, all_results.cost_random)
     storage, cost = rmfs.run(demandlist, solutionlist_ga)
     print_stats(storage, cost, len(demandlist))
 
@@ -79,6 +79,6 @@ def main(list_number):
 if __name__ == '__main__':
     resultlist = []
     for i in range(3):  # Iterates the three demandlists and executes main() with them
-        print(f">> Demandlist {i}")
+        print(f">> Demandlist {i+1}")
         main(i+1)
     createOutput(resultlist)
