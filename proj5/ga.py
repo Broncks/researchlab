@@ -51,7 +51,6 @@ def ga(demandlist, rmfs, init_cost):
 
 
 class Population:
-
     def __init__(self, demandlist, rmfs, NOOB_PERCENTAGE: float):
         """
             Creates and initializes Population() object
@@ -151,6 +150,7 @@ class Population:
 
     def mutation1(self, children1, children2):
         """
+            This method is not in use.
             Mutates children by randomly selecting a span and inverting the genes
             -> Inversion
 
